@@ -1,18 +1,20 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
 )
 
 func main() {
+	var port int
+	flag.IntVar(&port, "port", 7036, "listen port")
+	flag.Parse()
+
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
-		// w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-		// w.WriteHeader(200)
 		fmt.Fprintf(w, req.RemoteAddr)
-
 	})
-	log.Fatal(http.ListenAndServe(":7036", mux))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), mux))
 }
