@@ -15,7 +15,7 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	port := os.Getenv("PORT")// or "7036"
+	port := os.Getenv("PORT")
 	if ; port=="" {
 		port = "7036"
 	}
