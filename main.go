@@ -23,5 +23,6 @@ func main() {
 	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		fmt.Fprintf(w, req.RemoteAddr)
 	})
+	fmt.Printf("listening on %s...\n", addr)
 	log.Fatal(http.ListenAndServe(addr, mux))
 }
