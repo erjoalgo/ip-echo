@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"github.com/kr/pretty"
 )
 
 func main() {
@@ -15,7 +16,9 @@ func main() {
 	mux := http.NewServeMux()
 	addr := fmt.Sprintf(":%d", port)
 	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
-		fmt.Fprintf(w, req.RemoteAddr)
+		fmt.Fprintln(w, req.RemoteAddr)
+		fmt.Fprintln(w, "")
+		fmt.Fprintf(w, "%# v", pretty.Formatter(req))
 	})
 	fmt.Printf("listening on %s...\n", addr)
 	log.Fatal(http.ListenAndServe(addr, mux))
