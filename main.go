@@ -22,16 +22,22 @@ func ReadUserIP(r *http.Request) string {
 
 func main() {
 	var port int
+	var verboseReplies bool
 	flag.IntVar(&port, "port", 7036, "listen port")
+	flag.BoolVar(&verboseReplies, "verbose-replies", false,
+		"whether to serve replies with excessive debug information")
 	flag.Parse()
 
 	mux := http.NewServeMux()
 	addr := fmt.Sprintf(":%d", port)
 	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
 		ipAdd := ReadUserIP(req)
-		fmt.Fprintln(w, ipAdd)
-		fmt.Fprintln(w, "")
-		fmt.Fprintf(w, "%# v", pretty.Formatter(req))
+		fmt.Fprintf(w, "Ip-Address: %s\n", ipAdd)
+		fmt.Fprintf(w, "User-Agent: %s\n", req.Header.Get("User-Agent"))
+		if verboseReplies {
+			fmt.Fprintln(w, "")
+			fmt.Fprintf(w, "%# v", pretty.Formatter(req))
+		}
 	})
 	fmt.Printf("listening on %s...\n", addr)
 	log.Fatal(http.ListenAndServe(addr, mux))
